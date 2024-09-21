@@ -7,6 +7,8 @@ import * as dotenv from "dotenv"
 
 dotenv.config();
 
+/// TODO: add typeorm, finish the user module, make /verify command. I will think of some more tomorrow.
+
 @Module({
   imports: [
     DiscordModule.forRootAsync({
