@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Client } from 'discord.js';
 
 @Injectable()
-export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+export class AppService implements OnModuleInit {
+  private _client: Client;
+
+  async onModuleInit() {
+    
   }
 }
