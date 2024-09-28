@@ -4,34 +4,45 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DiscordModule } from '@discord-nestjs/core';
 import { GatewayIntentBits } from 'discord.js';
-import * as dotenv from "dotenv"
-
-dotenv.config();
-
-/// TODO: add typeorm, finish the user module, make /verify command. I will think of some more tomorrow.
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { BotModule } from './bot/bot.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',  // or 'postgres', 'mongodb', etc.
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    ConfigModule.forRoot({
+      cache: true,
+      isGlobal: true
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (cfg: ConfigService) => ({
+        type: 'mysql',  // or 'postgres', 'mongodb', etc.
+        host: cfg.get<string>("DB_HOST"),
+        port: cfg.get<number>("DB_PORT"),
+        username: cfg.get<string>("DB_USERNAME"),
+        password: cfg.get<string>("DB_PASSWORD"),
+        database: cfg.get<string>("DB_DATABASE"),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        autoLoadEntities: true,
+        synchronize: false,
+      })
     }),
     DiscordModule.forRootAsync({
-      useFactory: () => ({
-        token: process.env.TOKEN,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (cfg: ConfigService) => ({
+        token: cfg.get<string>("TOKEN"),
         discordClientOptions: {
           intents: [
-            GatewayIntentBits.Guilds
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.MessageContent,
+            GatewayIntentBits.GuildMessages
           ],
         },
       }),
     }),
+    BotModule
   ],
   controllers: [AppController],
   providers: [AppService],
