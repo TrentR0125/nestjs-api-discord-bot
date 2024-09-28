@@ -1,6 +1,12 @@
 ## .env
 ```
 TOKEN=
+
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
 ```
 
 <p align="center">
