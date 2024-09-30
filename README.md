@@ -7,6 +7,9 @@ DB_PORT=
 DB_USERNAME=
 DB_PASSWORD=
 DB_DATABASE=
+
+LOG_CHANNEL=
+STARTUP_CHANNEL=
 ```
 
 <p align="center">

@@ -1,5 +1,6 @@
-import { IsString } from "class-validator";
+import { IsInt, IsString } from "class-validator";
 import { Column, Entity, PrimaryColumn } from "typeorm";
+import { MuteStatus } from "./models/MuteStatus";
 
 @Entity({ name: "verifiedUser" })
 export class VerifiedUser {
@@ -11,8 +12,7 @@ export class VerifiedUser {
     @Column()
     Nickname: string;
 
-    // prolly switch this to an enum instead
-    @IsString()
+    @IsInt()
     @Column()
-    MuteStatus: "UNMUTED" | "MUTED";
+    MuteStatus: MuteStatus.Unmuted | MuteStatus.Muted;
 }
